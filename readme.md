@@ -175,3 +175,28 @@ Command for running test:
 - go test -v
 - go test -cover
 - go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+
+
+## Section 3: Building a Basic Web Application
+### Making a "Hello, World" web application
+main.go
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+		n, err := fmt.Fprintf(w, "Hello, world!")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(fmt.Sprintf("Number of bytes written: %d", n))
+	})
+
+	_ = http.ListenAndServe(":8080", nil)
+}
+```

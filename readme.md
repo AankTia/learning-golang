@@ -200,3 +200,6 @@ func main() {
 	_ = http.ListenAndServe(":8080", nil)
 }
 ```
+
+### Making our application module-ready
+go mod init _MODULE_NAME_

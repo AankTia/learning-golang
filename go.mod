@@ -1,3 +1,3 @@
-module github.com/AankTia/learning-golang
+module learning-go
 
 go 1.23.3

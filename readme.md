@@ -85,3 +85,93 @@ func main() {
 }
 ```
 ### Writing Tests in Go
+main.go
+```go
+package main
+
+import (
+	"errors"
+	"log"
+)
+
+func main() {
+	result, err := devide(100.0, 0)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("result of division is", result)
+}
+
+func devide(x, y float32) (float32, error) {
+	var result float32
+
+	if y == 0 {
+		return result, errors.New("cannot devide by 0")
+	}
+
+	result = x / y
+	return result, nil
+}
+```
+
+main_test.go
+```go
+package main
+
+import "testing"
+
+var tests = []struct {
+	name     string
+	divident float32
+	divisor  float32
+	expected float32
+	isErr    bool
+}{
+	{"valid-date", 100.0, 10.0, 10.0, false},
+	{"invalid-date", 100.0, 0.0, 0.0, true},
+	{"expect-5", 50.0, 10.0, 5.0, false},
+	{"expect-fraction", -1.0, -777.0, 0.0012870013, false},
+}
+
+func TestDivision(t *testing.T) {
+	for _, tt := range tests {
+		got, err := devide(tt.divident, tt.divisor)
+		if tt.isErr {
+			if err == nil {
+				t.Error("expected an error but did not got one")
+			}
+		} else {
+			if err != nil {
+				t.Error("did not expect an error but gone one", err.Error())
+			}
+		}
+
+		if got != tt.expected {
+			t.Errorf("expected %f bit got %f", tt.expected, got)
+		}
+	}
+}
+
+func TestDevide(t *testing.T) {
+	_, err := devide(10.0, 1.0)
+	if err != nil {
+		t.Error("Got an error when we should not have")
+	}
+}
+
+func TestBadDevide(t *testing.T) {
+	_, err := devide(10.0, 0)
+	if err == nil {
+		t.Error("Dig not get an error when we should not have")
+	}
+}
+
+```
+
+Command for running test:
+go test
+go test -v
+go test -cover
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
